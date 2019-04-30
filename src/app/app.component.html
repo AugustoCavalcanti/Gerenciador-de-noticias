@@ -1,0 +1,139 @@
+
+
+<div class="container">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" (click)="logica.mudarTela('home')">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="logica.mudarTela('cadastro')">Cadastrar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="logica.mudarTela('publicar')">Publicar</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="logica.mudarTela('estatisticas')">Estatisticas</a>
+    </li>
+  </ul>
+</nav>
+<br>
+
+  <div *ngIf="logica.Tela == 'home'">
+    <h1>Notícias Publicadas</h1>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Notícias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let noticia of logica.ListaNoticias()">
+        <td *ngIf="noticia.publicada">{{ noticia.titulo}}</td>
+        <td *ngIf="noticia.publicada"><button class="btn btn-dark" (click)="logica.LerNoticia(noticia) || logica.mudarTela('leitura')">Ler</button>
+      </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="logica.Tela == 'leitura'">
+      <h1>{{ logica.Visualizar.titulo}}</h1>
+      <p>Autor: {{ logica.Visualizar.autor }}</p>
+      <p>{{ logica.Visualizar.conteudo }}</p>
+  </div>
+
+  <div *ngIf="logica.Tela == 'cadastro'">
+    <h1>Cadastre uma nova notícia</h1>
+      <form #formulario="ngForm">
+        <div class="form-group">
+          <label for="titulo">Titulo</label>
+          <input type="text" class="form-control" id="titulo" name="titulo" [(ngModel)]="titulo" required>
+        </div>
+        <div class="form-group">
+          <label for="autor">Autor</label>
+          <select class="form-control" name="autor" id="autor" [(ngModel)]="autor" required>
+            <option *ngFor="let a of logica.ListaAutores()">{{a.nome }}</option>
+        </select>
+        </div>
+        <div class="form-group">
+          <label for="conteudo">Conteudo</label>
+          <textarea class="form-control" id="conteudo" name="conteudo" rows="3" [(ngModel)]="conteudo" required></textarea>
+        </div>
+        <button class="btn btn-dark" (click)="salvar(formulario) || logica.mudarTela('publicar')" [disabled]="!formulario.form.valid">Salvar</button>
+      </form>
+  </div>
+
+  <div *ngIf="logica.Tela == 'publicar'">
+    <h1>Noticias Não Publicadas</h1>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Notícias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let noticia of logica.ListaNoticias()">
+        <td *ngIf="!noticia.publicada">{{ noticia.titulo}}</td>
+        <td *ngIf="!noticia.publicada"><button class="btn btn-dark" (click)="logica.pulicar(noticia)">Publicar</button></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="logica.Tela == 'estatisticas'">
+    <h1>Estatísticas Autores</h1>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Autor</th>
+        <th>Quantidade de publicações:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let autor of logica.ListaAutores()">
+        <td>{{ autor.nome }}</td>
+        <td>{{ autor.publicacoes }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Autor com mais publicações</th>
+      </tr>
+      <tr>
+        <th>Autor</th>
+        <th>Quantidade de publicações:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ logica.AutorMaisPublicacoes().nome }}</td>
+        <td>{{ logica.AutorMaisPublicacoes().publicacoes }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Titulo</th>
+        <th>Quantidade de visualizações:</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let noticia of logica.ListaNoticias()">
+        <td *ngIf="noticia.publicada">{{ noticia.titulo }}</td>
+        <td *ngIf="noticia.publicada">{{ noticia.visualisacoes }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
